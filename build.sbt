@@ -9,7 +9,9 @@ libraryDependencies ++= Seq(
    "com.thinkaurelius.titan" % "titan-core" % titanVersion,
    "com.thinkaurelius.titan" % "titan-cassandra" % titanVersion,
    "com.thinkaurelius.titan" % "titan-es" % titanVersion,
-   "org.scalatest" %% "scalatest" % "2.2.5" % "test"
+   "com.typesafe.play" %% "play-json" % "2.5.6",
+  "org.jliszka" %% "probability-monad" % "1.0.1",
+  "org.scalatest" %% "scalatest" % "2.2.5" % "test"
 )
 
 resolvers += Resolver.mavenLocal
