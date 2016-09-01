@@ -1,5 +1,5 @@
-name := """automatic-goggles"""
-version := "0.2"
+name := """agitated-hippo"""
+version := "0.1"
 scalaVersion := "2.11.8"
 
 val titanVersion = "1.0.0"
