@@ -1,10 +1,11 @@
+package agitated.hippo
+
 import java.io.{File, PrintWriter}
 
 import scala.io.Source
 
-object NameMixer {
+object Mixer {
 
-  val base_dir = "src/main/resources"
 
   def main(args: Array[String]) = {
 
@@ -20,12 +21,4 @@ object NameMixer {
     writer.close()
   }
 
-  def fileToSeq(name: String) = {
-    val f = new File(s"$base_dir/$name")
-    Source.fromFile(f).getLines.toSeq
-  }
-
-  def stripAndConc(firstName: String, lastName: String) = {
-    s"${firstName.trim} ${lastName.trim}"
-  }
 }

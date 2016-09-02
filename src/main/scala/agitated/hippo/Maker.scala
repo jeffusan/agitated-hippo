@@ -1,13 +1,11 @@
-import java.io.File
-import java.text.DateFormat
+package agitated.hippo
+
 import java.util.Date
 
-import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
-import probability_monad.Distribution
-
-import scala.io.Source
-import scala.util.Random
+import com.thinkaurelius.titan.core.TitanFactory
 import gremlin.scala._
+
+import scala.util.Random
 
 case class Person(firstName: String, lastName: String) {
 
@@ -18,28 +16,14 @@ case class Person(firstName: String, lastName: String) {
 
 case class Town(name: String, nihongo: String, prefecture: String, density: Double, population: Int, area: Double, founded: Date)
 
-object FriendMaker {
-
-  val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
-  import org.apache.commons.configuration.BaseConfiguration
-  val conf = new BaseConfiguration()
-  conf.setProperty("storage.backend","cassandrathrift")
-  conf.setProperty("storage.hostname", "127.0.0.1")
-  import com.thinkaurelius.titan.core.TitanFactory
-  val graph = TitanFactory.open(conf)
-
-  val FirstName = Key[String]("firstName")
-  val LastName = Key[String]("lastName")
-
-  val Vehicle = Key[String]("vehicle")
-
-  val Nihongo = Key[String]("nihongo")
-  val Area = Key[Double]("area")
-  val Prefecture = Key[String]("prefecture")
+object Maker {
 
   def main(args: Array[String]) = {
+    val graph = TitanFactory.open(conf)
+
     val people = namesToPeople("names.txt").map(p => graph + (p.name, FirstName -> p.firstName, LastName -> p.lastName))
     println(s"created ${people.size} people")
+
     val vehicles = fileToSeq("vehicles.txt").map(v => graph + v)
     println(s"created ${vehicles.size} vehicles")
     val towns = placesToTowns("places.csv").map { t =>
@@ -50,9 +34,10 @@ object FriendMaker {
         Prefecture -> t.prefecture)}
 
     println(s"created ${towns.size} towns")
+    graph.close()
   }
 
-  def namesToPeople(fileName: String): Seq[Person] = fileToSeq(fileName).map(n => Person(n.split(" ")(0), n.split(" ")(1)))
+  def namesToPeople(fileName: String): Seq[Person] = fileToSeq(fileName).map(n => new Person(n.split(" ")(0), n.split(" ")(1)))
 
   def placesToTowns(fileName: String): Seq[Town] = {
     fileToSeq(fileName).map { p =>
@@ -67,22 +52,6 @@ object FriendMaker {
         founded = format.parse(ps(6))
       )
     }
-  }
-
-  def fileToSeq(name: String): Seq[String] = {
-    val f = new File(s"${NameMixer.base_dir}/$name")
-    Source.fromFile(f).getLines.toSeq
-  }
-
-  // should give a uniform probability
-  val uniform = new Distribution[Double] {
-    private val rand = new java.util.Random()
-    override def get = rand.nextDouble()
-  }
-
-  // returns a distribution of true/falses
-  def tf(p: Double): Distribution[Boolean] = {
-    uniform.map(_ < p)
   }
 
   def getFriends(friends: Seq[Person]): Seq[Person] = {
