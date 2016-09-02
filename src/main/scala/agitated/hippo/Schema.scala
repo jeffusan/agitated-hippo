@@ -43,7 +43,7 @@ object Schema {
     val prefecture = m.makePropertyKey("prefecture").dataType(classOf[String]).make()
     val population = m.makePropertyKey("population").dataType(classOf[Integer]).make()
     val area = m.makePropertyKey("area").dataType(classOf[java.lang.Long]).make()
-    val density = m.makePropertyKey("density").dataType(classOf[Integer]).make()
+    val density = m.makePropertyKey("density").dataType(classOf[java.lang.Long]).make()
     val founded = m.makePropertyKey("founded").dataType(classOf[Date]).make()
     val age = m.makePropertyKey("age").dataType(classOf[Integer]).make()
 

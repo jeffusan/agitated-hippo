@@ -16,12 +16,15 @@ trait InMemoryConnect {
 
 class SchemaSpec extends FlatSpec with Matchers with InMemoryConnect {
 
-  "Gremlin-scala" should "connect to a Titan database, pull out Saturn's key and shutdown cleanly" in {
+  "Schema cleaner" should "connect to a Titan database, and nuke everything" in {
     val graph = connect()
+//    val graph = TitanFactory.open(conf)
 
     Schema.defineSchema(graph.openManagement())
     graph.close()
 
+    // this is a development tool
+    // it should clear both the data and any indices
     TitanCleanup.clear(graph)
   }
 }

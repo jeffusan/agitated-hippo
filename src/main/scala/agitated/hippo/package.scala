@@ -1,6 +1,7 @@
 package agitated
 
 import java.io.File
+import java.util.Date
 
 import gremlin.scala.Key
 
@@ -20,15 +21,17 @@ package object hippo {
 
   val base_dir = "src/main/resources"
 
-  val Person = Key[String]("person")
   val FirstName = Key[String]("firstName")
   val LastName = Key[String]("lastName")
 
   val Vehicle = Key[String]("vehicle")
 
   val Nihongo = Key[String]("nihongo")
-  val Area = Key[Double]("area")
   val Prefecture = Key[String]("prefecture")
+  val Population = Key[Integer]("population")
+  val Density = Key[Long]("density")
+  val Area = Key[Long]("area")
+  val Founded = Key[Date]("founded")
 
   def fileToSeq(name: String) = {
     val f = new File(s"$base_dir/$name")

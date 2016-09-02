@@ -14,14 +14,14 @@ case class Person(firstName: String, lastName: String) {
   }
 }
 
-case class Town(name: String, nihongo: String, prefecture: String, density: Double, population: Int, area: Double, founded: Date)
+case class Town(name: String, nihongo: String, prefecture: String, density: java.lang.Long, population: Int, area: java.lang.Long, founded: Date)
 
 object Maker {
 
   def main(args: Array[String]) = {
     val graph = TitanFactory.open(conf)
 
-    val people = namesToPeople("names.txt").map(p => graph + (p.name, FirstName -> p.firstName, LastName -> p.lastName))
+    val people = namesToPeople("names.txt").map(p => graph + ("person", FirstName -> p.firstName, LastName -> p.lastName))
     println(s"created ${people.size} people")
 
     val vehicles = fileToSeq("vehicles.txt").map(v => graph + v)
@@ -30,8 +30,13 @@ object Maker {
       graph + (
         t.name,
         Nihongo -> t.nihongo,
+        Prefecture -> t.prefecture,
+        Population -> t.population,
+        Density -> t.density,
         Area -> t.area,
-        Prefecture -> t.prefecture)}
+        Founded -> t.founded
+        )
+    }
 
     println(s"created ${towns.size} towns")
     graph.close()
@@ -47,8 +52,8 @@ object Maker {
         nihongo = ps(1),
         prefecture = ps(2),
         population = ps(3).toInt,
-        density = ps(4).toDouble,
-        area = ps(5).toDouble,
+        density = java.lang.Long.valueOf(ps(4).toLong),
+        area = java.lang.Long.valueOf(ps(5).toLong),
         founded = format.parse(ps(6))
       )
     }
